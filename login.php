@@ -4,28 +4,30 @@
 	$local = "localhost";
 	$user = "root";
 	$pass = "";
-	$dbname = "pizzaria";
+	$dbname = "infopizza";
 	//criar a conexão
 	$conn = new mysqli($local,$user,$pass,$dbname);
 	//verificar a conexão
 	if($conn->connect_error){
-		die("Falha na conexão: " . $conn->connet_error);
+		die("Falha na conexão: " . $conn->connect_error);
 	}
 
 	$email = $_POST['email'] ?? '';
 	$senha = $_POST['senha'] ?? '';
 	
-	$stmt = $conn->prepare("SELECT id, email, senha, nome FROM cliente WHERE email = ? LIMIT 1");
+	$stmt = $conn->prepare("SELECT id, email, senha, nome FROM usuarios WHERE email = ? LIMIT 1");
 	$stmt->bind_param("s",$email);
 	$stmt->execute();
 
-	$cliente = $stmt->get_result()->fetch_assoc();
+	$usuario = $stmt->get_result()->fetch_assoc();
 
-	if($cliente && password_verify($senha, $cliente['senha'])){
-		$_SESSION['idcliente'] = $cliente['id'];
-		$_SESSION['email'] = $cliente['email'];
-		$_SESSION['nome'] = $cliente['nome'];
-		echo "Login OK";
+	if($usuario && password_verify($senha, $usuario['senha'])){
+		$_SESSION['idcliente'] = $usuario['id'];
+		$_SESSION['email'] = $usuario['email'];
+		$_SESSION['nome'] = $usuario['nome'];
+		//echo "Login OK";
+		header("Location: admin/");
+    	exit;
 	}else{
 		echo "Usuário inválido ou senha errada!";
 	}
