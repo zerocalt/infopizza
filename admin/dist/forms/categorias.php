@@ -14,12 +14,12 @@
             <!--begin::Row-->
             <div class="row">
               <div class="col-sm-6">
-                <h3 class="mb-0">Cadastro de Bairros</h3>
+                <h3 class="mb-0">Cadastro de Categorias</h3>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="../index/index.php">Principal</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Bairros</li>
+                  <li class="breadcrumb-item active" aria-current="page">Categorias</li>
                 </ol>
               </div>
             </div>
@@ -37,7 +37,7 @@
               <!--begin::Col-->
               <div class="col-12">
                 <div class="callout callout-info">
-                  O Cadastro de Bairros serve para identificar o valor da entrega pela localidade.
+                  O Cadastro de Categorias serve para organizar os produtos por tipos.
                 </div>
               </div>
               <!--end::Col-->
@@ -47,28 +47,22 @@
                 <div class="card card-primary card-outline mb-4">
                   <!--begin::Header-->
                   <div class="card-header">
-                    <div class="card-title">Cadastro de Bairro</div>
+                    <div class="card-title">Cadastro de Categoria</div>
                   </div>
                   <!--end::Header-->
                   <!--begin::Form-->
-                  <form action="bairros.php" method="POST">
+                  <form action="categorias.php" method="POST">
                     <!--begin::Body-->
                     <div class="card-body">
                       <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Nome do Bairro</label>
+                        <label for="exampleInputEmail1" class="form-label">Nome da Categoria</label>
                         <input
                           type="text"
                           class="form-control"
-                          id="bairro"
-                          name="bairro"
+                          id="categoria"
+                          name="categoria"
                           required
                         />
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label">Valor da Entrega</label>
-                        <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">R$</span>
-                        <input type="text" class="form-control" id="valor" name="valor" required />
                       </div>
                       </div>
                     </div>
