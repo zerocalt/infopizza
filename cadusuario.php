@@ -25,7 +25,7 @@
 	  return $p[2] . '-' . $p[1] . '-' . $p[0];
 	}
 
-	$stmt = $conn->prepare("INSERT INTO usuarios (nome,telefone,datanascimento,email,senha) VALUES (?,?,?,?,?)");
+	$stmt = $conn->prepare("INSERT INTO pizzaria (nome,telefone,datanascimento,email,senha) VALUES (?,?,?,?,?)");
 	$stmt->bind_param("sssss",$nome,$telefone,brToMySqlDate($datanascimento),$email,$senha);
 	if(!$stmt->execute()){
 		die("Erro, tente novamente!");

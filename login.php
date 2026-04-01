@@ -15,7 +15,7 @@
 	$email = $_POST['email'] ?? '';
 	$senha = $_POST['senha'] ?? '';
 	
-	$stmt = $conn->prepare("SELECT id, email, senha, nome FROM usuarios WHERE email = ? LIMIT 1");
+	$stmt = $conn->prepare("SELECT id, email, senha, nome FROM pizzaria WHERE email = ? LIMIT 1");
 	$stmt->bind_param("s",$email);
 	$stmt->execute();
 

@@ -1,6 +1,9 @@
 <?php
+  require_once __DIR__ . '/../classes/Bairros.php';
   if(isset($_POST['bairro'])){
-    die("Texto enviado!");
+    $bairro = trim($_POST['bairro']);
+    $valor = str_replace(['.', ','], ['', '.'], $_POST['valor']);
+    $bairro = new Bairros(null, 1, $bairro, $valor, 0);
   }
   require_once("../top/topo.php");
   require_once("../menu/menu.php");

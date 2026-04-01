@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Estrutura para tabela `cliente`
 --
 
-CREATE TABLE `usuarios` (
+CREATE TABLE `pizzaria` (
   `id` int(11) NOT NULL,
   `nome` varchar(150) NOT NULL,
   `telefone` varchar(15) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE `usuarios` (
 --
 -- Índices de tabela `usuarios`
 --
-ALTER TABLE `usuarios`
+ALTER TABLE `pizzaria`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -54,7 +54,7 @@ ALTER TABLE `usuarios`
 --
 -- AUTO_INCREMENT de tabela `usuarios `
 --
-ALTER TABLE `usuarios`
+ALTER TABLE `pizzaria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 

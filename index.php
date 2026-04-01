@@ -1,9 +1,3 @@
-<?php
-	session_start();
-	if(isset($_SESSION['idcliente'])){
-		echo "Olá, ".$_SESSION['nome'];
-	}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
