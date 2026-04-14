@@ -1,17 +1,6 @@
 <?php
-	session_start();
-	//dados do banco de dados
-	$local = "localhost";
-	$user = "root";
-	$pass = "";
-	$dbname = "infopizza";
-	//criar a conexão
-	$conn = new mysqli($local,$user,$pass,$dbname);
-	//verificar a conexão
-	if($conn->connect_error){
-		die("Falha na conexão: " . $conn->connect_error);
-	}
-
+	require_once("admin/app/config/database.php");
+	
 	$email = $_POST['email'] ?? '';
 	$senha = $_POST['senha'] ?? '';
 	

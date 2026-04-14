@@ -1,4 +1,10 @@
 <?php
+  require_once("../config/database.php");
+  $id_pizzaria = 1;
+  $stmt = $pdo->prepare("SELECT * FROM categorias WHERE pizzaria_id = :pizzaria_id ORDER BY nome");
+  $stmt->execute([':pizzaria_id' => $id_pizzaria]);
+  $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
 ?>
@@ -27,33 +33,17 @@
               </tr>
             </thead>
             <tbody>
+              <?php foreach($categorias as $ct): ?>
               <tr>
-                <td>Pizzas Salgadas</td>
-                <td>40</td>
-                <td>Todas as pizzas de sabores tradicionais e especiais.</td>
+                <td><?php echo $ct['nome']; ?></td>
+                <td><?php echo $ct['tempo_preparo_padrao']; ?></td>
+                <td><?php echo $ct['descricao']; ?></td>
                 <td>
-                  <a href="categoria_form.php?id=1" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
+                  <a href="categoria_form.php?id=<?php echo $ct['id']; ?>" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
                   <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                 </td>
               </tr>
-              <tr>
-                <td>Bebidas</td>
-                <td>5</td>
-                <td>Sucos, Refrigerantes e Cervejas.</td>
-                <td>
-                  <a href="categoria_form.php?id=2" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
-                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td>Pizzas Doces</td>
-                <td>35</td>
-                <td>Sabores com chocolate, frutas e doces variados.</td>
-                <td>
-                  <a href="categoria_form.php?id=3" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
-                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </td>
-              </tr>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>

@@ -1,4 +1,33 @@
 <?php
+  require_once("../config/database.php");
+
+  if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try{
+      $nome = $_POST['nome'];
+      $cpf = $_POST['cpf'];
+      $cargo = $_POST['cargo'];
+      $telefone = $_POST['telefone'];
+      $salario = $_POST['salario'];
+      $data_admissao = $_POST['data_admissao'];
+      $pizzaria_id = 1;
+
+      $stmt = $pdo->prepare("INSERT INTO funcionarios (pizzaria_id, nome, cpf, cargo, telefone, salario, data_admissao) VALUES (:pizzaria_id, :nome, :cpf, :cargo, :telefone, :salario, :data_admissao)");
+      $stmt->bindParam(':pizzaria_id', $pizzaria_id);
+      $stmt->bindParam(':nome', $nome);
+      $stmt->bindParam(':cpf', $cpf);
+      $stmt->bindParam(':cargo', $cargo);
+      $stmt->bindParam(':telefone', $telefone);
+      $stmt->bindParam(':salario', $salario);
+      $stmt->bindParam(':data_admissao', $data_admissao);
+      $stmt->execute();
+
+      header("Location: funcionarios_lista.php");
+      exit();
+
+    } catch(PDOException $e) {
+      echo "Erro ao cadastrar funcionário: " . $e->getMessage();
+    }
+  }
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
 ?>
@@ -20,7 +49,7 @@
   <div class="app-content">
     <div class="container-fluid">
       <div class="card card-primary card-outline">
-        <form action="funcionarios_lista.php" method="POST">
+        <form action="funcionario_form.php" method="POST">
           <div class="card-body">
             <div class="row">
               <div class="col-md-6">
