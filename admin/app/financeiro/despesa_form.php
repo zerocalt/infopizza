@@ -1,4 +1,34 @@
 <?php
+  require_once("../config/database.php");
+  require_once("../config/permissoes.php");
+  exigirLogin();
+  
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+  try{
+    $descricao = $_POST['descricao'];
+    $categoria = $_POST['categoria'];
+    $tipo = $_POST['tipo'];
+    $valor = $_POST['valor'];
+    $vencimento = $_POST['vencimento'];
+    $status_pagamento = $_POST['status'];
+    $pizzaria_id = $_SESSION['pizzaria_id'];
+
+    $stmt = $pdo->prepare("INSERT INTO despesas (pizzaria_id, descricao, categoria, tipo, valor, vencimento, status_pagamento) VALUES (:pizzaria_id, :descricao, :categoria, :tipo, :valor, :vencimento, :status_pagamento)");
+    $stmt->bindParam(':pizzaria_id', $pizzaria_id);
+    $stmt->bindParam(':descricao', $descricao);
+    $stmt->bindParam(':categoria', $categoria);
+    $stmt->bindParam(':tipo', $tipo);
+    $stmt->bindParam(':valor', $valor);
+    $stmt->bindParam(':vencimento', $vencimento);
+    $stmt->bindParam(':status_pagamento', $status_pagamento);
+    $stmt->execute();
+
+    header("Location:despesas_lista.php");
+    exit();
+  }catch(PDOException $e) {
+    echo " erro ao cadastrar categoria: " . $e->getMessage();
+  }
+  }
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
 ?>
@@ -20,7 +50,7 @@
   <div class="app-content">
     <div class="container-fluid">
       <div class="card card-primary card-outline">
-        <form action="despesas_lista.php" method="POST">
+        <form action="despesa_form.php" method="POST">
           <div class="card-body">
             <div class="row">
               <div class="col-md-6">

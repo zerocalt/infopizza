@@ -1,6 +1,9 @@
 <?php
   require_once("../config/database.php");
-  $id_pizzaria = 1;
+  require_once("../config/permissoes.php");
+  exigirLogin();
+  
+  $id_pizzaria = $_SESSION['pizzaria_id'];
   $stmt = $pdo->prepare("SELECT * FROM categorias WHERE pizzaria_id = :pizzaria_id ORDER BY nome");
   $stmt->execute([':pizzaria_id' => $id_pizzaria]);
   $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);

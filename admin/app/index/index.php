@@ -1,4 +1,8 @@
 <?php
+  require_once("../config/database.php");
+  require_once("../config/permissoes.php");
+  exigirLogin();
+  
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
 ?>

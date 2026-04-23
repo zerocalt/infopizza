@@ -1,4 +1,54 @@
+
 <?php
+ require_once("../config/database.php");
+  require_once("../config/permissoes.php");
+  exigirLogin();
+
+ $pizzaria_id = $_SESSION['pizzaria_id'];
+ $id = $_GET['id'] ?? null;
+ if($id){
+    $stmt = $pdo->prepare("SELECT * FROM ingredientes WHERE id = :id AND pizzaria_id = :pizzaria_id");
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':pizzaria_id', $pizzaria_id);
+    $stmt->execute();
+    $ingredientes = $stmt->fetch(PDO::FETCH_ASSOC);
+    if(!$ingredientes){
+      header("Location: ingredientes_lista.php");
+      exit();
+    }
+  }
+
+  if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try{
+    $nome = $_POST['nome'];
+    $unidade = $_POST['unidade'];
+    $estoque_minimo = $_POST['estoque_minimo'];
+
+    if($id){
+        $stmt = $pdo->prepare("UPDATE ingredientes SET nome = :nome, unidade_medida = :unidade_medida, estoque_minimo = :estoque_minimo WHERE id = :id AND pizzaria_id = :pizzaria_id");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':pizzaria_id', $pizzaria_id);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':unidade_medida', $unidade);
+        $stmt->bindParam(':estoque_minimo', $estoque_minimo);
+        $stmt->execute(); 
+      } else {
+
+    $stmt = $pdo->prepare("INSERT INTO ingredientes ( pizzaria_id,nome, unidade_medida, estoque_minimo) VALUES (:pizzaria_id, :nome, :unidade, :estoque_minimo)");
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':unidade', $unidade);
+    $stmt->bindParam(':estoque_minimo', $estoque_minimo);
+    $stmt->bindParam(':pizzaria_id', $pizzaria_id);
+    $stmt->execute();
+
+    }
+
+    header("Location: ingredientes_lista.php");
+    exit();
+    }catch(PDOException $e) {
+      echo "erro ao cadastrar categoria: " . $e->getMessage();
+    }
+  }
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
 ?>
@@ -20,24 +70,24 @@
   <div class="app-content">
     <div class="container-fluid">
       <div class="card card-primary card-outline">
-        <form action="ingredientes_lista.php" method="POST">
+        <form action="ingrediente_form.php<?php echo $id ? '?id=' . $id : ''; ?>" method="POST">
           <div class="card-body">
             <div class="mb-3">
               <label class="form-label">Nome do Ingrediente</label>
-              <input type="text" class="form-control" name="nome" placeholder="Ex: Queijo Mussarela" required>
+              <input type="text" class="form-control" name="nome" placeholder="Ex: Queijo Mussarela" value="<?php echo $id ? $ingredientes['nome'] : ''; ?>" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Unidade de Medida</label>
               <select class="form-select" name="unidade" required>
-                <option value="kg">Quilograma (kg)</option>
-                <option value="un">Unidade (un)</option>
-                <option value="litro">Litro (l)</option>
-                <option value="grama">Grama (g)</option>
+                <option value="kg" <?php echo $id && $ingredientes['unidade_medida'] === 'kg' ? 'selected' : ''; ?>>Quilograma (kg)</option>
+                <option value="un" <?php echo $id && $ingredientes['unidade_medida'] === 'un' ? 'selected' : ''; ?>>Unidade (un)</option>
+                <option value="litro" <?php echo $id && $ingredientes['unidade_medida'] === 'litro' ? 'selected' : ''; ?>>Litro (l)</option>
+                <option value="grama" <?php echo $id && $ingredientes['unidade_medida'] === 'grama' ? 'selected' : ''; ?>>Grama (g)</option>
               </select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Estoque Mínimo para Alerta</label>
-                <input type="number" step="0.001" class="form-control" name="estoque_minimo" placeholder="5.000">
+                <input type="number" step="0.001" class="form-control" name="estoque_minimo" placeholder="5.000" value="<?php echo $id ? $ingredientes['estoque_minimo'] : ''; ?>" required>
             </div>
           </div>
           <div class="card-footer">

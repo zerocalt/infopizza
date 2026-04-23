@@ -1,33 +1,40 @@
 <?php
   require_once("../config/database.php");
+  require_once("../config/permissoes.php");
+  exigirLogin();
 
-  if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try{
-      $nome = $_POST['nome'];
-      $cpf = $_POST['cpf'];
-      $cargo = $_POST['cargo'];
-      $telefone = $_POST['telefone'];
-      $salario = $_POST['salario'];
-      $data_admissao = $_POST['data_admissao'];
-      $pizzaria_id = 1;
+    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+      try{
+        $nome = $_POST['nome'];
+        $cpf = $_POST['cpf'];
+        $cargo = $_POST['cargo'];
+        $telefone = $_POST['telefone'];
+        $salario = $_POST['salario'];
+        $data_admissao = $_POST['data_admissao'];
+        $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+        $email = $_POST['email'];
+        $pizzaria_id = $_SESSION['pizzaria_id'];
 
-      $stmt = $pdo->prepare("INSERT INTO funcionarios (pizzaria_id, nome, cpf, cargo, telefone, salario, data_admissao) VALUES (:pizzaria_id, :nome, :cpf, :cargo, :telefone, :salario, :data_admissao)");
-      $stmt->bindParam(':pizzaria_id', $pizzaria_id);
-      $stmt->bindParam(':nome', $nome);
-      $stmt->bindParam(':cpf', $cpf);
-      $stmt->bindParam(':cargo', $cargo);
-      $stmt->bindParam(':telefone', $telefone);
-      $stmt->bindParam(':salario', $salario);
-      $stmt->bindParam(':data_admissao', $data_admissao);
-      $stmt->execute();
+        $stmt = $pdo->prepare("INSERT INTO funcionarios (pizzaria_id, nome, cpf, cargo, telefone, salario, data_admissao, email, senha) VALUES (:pizzaria_id, :nome, :cpf, :cargo, :telefone, :salario, :data_admissao, :email, :senha)");
+        $stmt->bindParam(':pizzaria_id', $pizzaria_id);
+        $stmt->bindParam(':nome', $nome);
+        $stmt->bindParam(':cpf', $cpf);
+        $stmt->bindParam(':cargo', $cargo);
+        $stmt->bindParam(':telefone', $telefone);
+        $stmt->bindParam(':salario', $salario);
+        $stmt->bindParam(':data_admissao', $data_admissao);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':senha', $senha);
+        $stmt->execute();
 
-      header("Location: funcionarios_lista.php");
-      exit();
+        header("Location: funcionarios_lista.php");
+        exit();
 
-    } catch(PDOException $e) {
-      echo "Erro ao cadastrar funcionário: " . $e->getMessage();
+    }catch(PDOException $e) {
+      echo "Erro: ". $e->getMessage();
     }
   }
+
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
 ?>
@@ -64,11 +71,16 @@
                 <div class="mb-3">
                   <label class="form-label">Cargo</label>
                   <select class="form-select" name="cargo" required>
+                    <option value="gerente">Administrador</option>
                     <option value="atendente">Atendente</option>
                     <option value="pizzaiolo">Pizzaiolo</option>
                     <option value="gerente">Gerente</option>
                     <option value="outros">Outros</option>
                   </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">E-mail</label>
+                  <input type="email" class="form-control" name="email" placeholder="seuemail@exemplo.com">
                 </div>
               </div>
               <div class="col-md-6">
@@ -83,6 +95,10 @@
                 <div class="mb-3">
                   <label class="form-label">Data de Admissão</label>
                   <input type="date" class="form-control" name="data_admissao">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Senha</label>
+                  <input type="password" class="form-control" name="senha" placeholder="********">
                 </div>
               </div>
             </div>

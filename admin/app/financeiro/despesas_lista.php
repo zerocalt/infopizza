@@ -1,4 +1,13 @@
 <?php
+  require_once("../config/database.php");
+  require_once("../config/permissoes.php");
+  exigirLogin();
+  
+  $pizzaria_id = $_SESSION['pizzaria_id'];
+  $stmt = $pdo->prepare("SELECT * FROM despesas WHERE pizzaria_id = :pizzaria_id ORDER BY descricao");
+  $stmt->execute([':pizzaria_id' => $id_pizzaria]);
+  $despesas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
 ?>
@@ -38,38 +47,19 @@
               </tr>
             </thead>
             <tbody>
+              <?php foreach($despesas as $dp): ?> 
               <tr>
-                <td>Conta de Energia (Luz)</td>
-                <td>10/03/2026</td>
-                <td>R$ 450,00</td>
-                <td><span class="badge text-bg-warning">Pendente</span></td>
+                <td><?php echo $dp['descricao']; ?></td>
+                <td><?php echo $dp['vencimento']; ?></td>
+                <td>R$ <?php echo number_format($dp['valor'], 2, ',', '.'); ?></td>
+                <td><span class="badge <?php echo $dp['status_pagamento'] === 'pago' ? 'text-bg-success' : 'text-bg-warning'; ?>"> <?php echo $dp['status_pagamento'] === 'pago' ? 'Pago' : 'Pendente'; ?></span></td>
                 <td>
                   <a href="despesa_form.php?id=1" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
                   <button class="btn btn-sm btn-success"><i class="bi bi-check"></i></button>
                   <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                 </td>
               </tr>
-              <tr>
-                <td>Fornecedor de Farinha</td>
-                <td>05/03/2026</td>
-                <td>R$ 1.200,00</td>
-                <td><span class="badge text-bg-success">Pago</span></td>
-                <td>
-                  <a href="despesa_form.php?id=2" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
-                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td>Internet Fibra</td>
-                <td>15/03/2026</td>
-                <td>R$ 120,00</td>
-                <td><span class="badge text-bg-warning">Pendente</span></td>
-                <td>
-                  <a href="despesa_form.php?id=3" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
-                  <button class="btn btn-sm btn-success"><i class="bi bi-check"></i></button>
-                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </td>
-              </tr>
+              <?php endforeach; ?>
             </tbody>
             <tfoot>
                 <tr class="table-info">

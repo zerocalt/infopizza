@@ -1,4 +1,31 @@
 <?php
+  require_once("../config/database.php");
+  require_once("../config/permissoes.php");
+  exigirLogin();
+
+  if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome = $_POST['nome'];
+    $cpf = $_POST['cpf'];
+    $cargo = $_POST['cargo'];
+    $telefone = $_POST['telefone'];
+    $salario = $_POST['salario'];
+    $data_admissao = $_POST['data_admissao'];
+    $pizzaria_id = $_SESSION['pizzaria_id'];
+
+    $stmt = $pdo->prepare("SELECT INTO funcionarios (pizzaria_id, nome, cpf, cargo, telefone, salario, data_admissao) VALUES (:pizzaria_id, :nome, :cpf, :cargo, :telefone, :salario, :data_admissao)");
+    $stmt->bindParam(':pizzaria_id', $pizzaria_id);
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':cpf', $cpf);
+    $stmt->bindParam(':cargo', $cargo);
+    $stmt->bindParam(':telefone', $telefone);
+    $stmt->bindParam(':salario', $salario);
+    $stmt->bindParam(':data_admissao', $data_admissao);
+    $stmt->execute();
+
+    header("Location: categorias_lista.php");
+    exit();
+  }
+
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
 ?>

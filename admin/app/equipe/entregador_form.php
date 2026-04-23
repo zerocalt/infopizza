@@ -1,4 +1,35 @@
 <?php
+ require_once("../config/database.php");
+  require_once("../config/permissoes.php");
+  exigirLogin();
+
+  if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try{
+    $nome = $_POST['nome'];
+    $cpf= $_POST['cpf'];
+    $telefone = $_POST['telefone'];
+    $veiculo_tipo = $_POST ['veiculo_tipo'];
+    $placa = $_POST['placa'];
+    $dados_bancarios = $_POST['dados_bancarios'];
+
+    $pizzaria_id = $_SESSION['pizzaria_id'];
+
+    $stmt = $pdo->prepare("INSERT INTO entregadores (pizzaria_id,nome,cpf,telefone,	veiculo_tipo,veiculo_placa	,dados_bancarios) VALUES (:pizzaria_id	,:nome	,:cpf,	:telefone,	:veiculo_tipo,	:veiculo_placa	,:dados_bancarios)");
+    $stmt->bindParam(':pizzaria_id', $pizzaria_id);
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':cpf', $cpf);
+    $stmt->bindParam(':telefone', $telefone);
+    $stmt->bindParam(':veiculo_tipo', $veiculo_tipo);
+    $stmt->bindParam(':veiculo_placa', $veiculo_tipo);
+    $stmt->bindParam(':dados_bancarios', $dados_bancarios);
+    $stmt->execute();
+
+    header("Location: entregadores_lista.php");
+    exit();
+    }catch(PDOxception $e){
+      echo"erro au cadastra categoria:" .$e->getMessage();
+  }
+  }
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
 ?>
@@ -20,7 +51,7 @@
   <div class="app-content">
     <div class="container-fluid">
       <div class="card card-primary card-outline">
-        <form action="entregadores_lista.php" method="POST">
+        <form action="entregador_form.php" method="POST">
           <div class="card-body">
             <div class="row">
               <div class="col-md-6">

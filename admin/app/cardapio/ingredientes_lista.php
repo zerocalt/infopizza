@@ -1,7 +1,15 @@
 <?php
+  require_once("../config/database.php");
+  require_once("../config/permissoes.php");
+  exigirLogin();
+  
+  $pizzaria_id = $_SESSION['pizzaria_id'];
+  $stmt = $pdo->prepare("SELECT * FROM ingredientes WHERE pizzaria_id = :pizzaria_id ORDER BY nome");
+  $stmt->execute([':pizzaria_id' => $id_pizzaria]);
+  $ingredientes = $stmt ->fetchALL(PDO::FETCH_ASSOC);
   require_once("../top/topo.php");
   require_once("../menu/menu.php");
-?>
+  ?>
 <main class="app-main">
   <div class="app-content-header">
     <div class="container-fluid">
@@ -26,30 +34,16 @@
               </tr>
             </thead>
             <tbody>
+              <?php foreach($ingredientes as $ct): ?>
               <tr>
-                <td>Calabresa</td>
-                <td>kg</td>
+                <td><?php echo $ct['nome']; ?></td>
+                <td><?php echo $ct['unidade_medida']; ?></td>
                 <td>
-                  <a href="ingrediente_form.php?id=1" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
+                  <a href="ingrediente_form.php?id=<?php echo  $ct['id']; ?>" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
                   <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                 </td>
               </tr>
-              <tr>
-                <td>Queijo Mussarela</td>
-                <td>kg</td>
-                <td>
-                  <a href="ingrediente_form.php?id=2" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
-                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td>Coca-Cola 2L</td>
-                <td>un</td>
-                <td>
-                  <a href="ingrediente_form.php?id=3" class="btn btn-sm btn-info"><i class="bi bi-pencil"></i></a>
-                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                </td>
-              </tr>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>

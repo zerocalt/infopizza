@@ -1,3 +1,28 @@
+<?php
+	require_once("admin/app/config/database.php");
+	require_once("admin/app/config/permissoes.php");
+	seLogado();
+
+	if($_SERVER['REQUEST_METHOD'] === 'POST') {
+		$email = $_POST['email'];
+		$senha = $_POST['senha'];
+
+		$stmt = $pdo->prepare("SELECT * FROM funcionarios WHERE email = :email");
+		$stmt->bindParam(':email', $email);
+		$stmt->execute();
+		$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		if($usuario && password_verify($senha, $usuario['senha'])) {
+			$_SESSION['usuario_id'] = $usuario['id'];
+			$_SESSION['usuario_nome'] = $usuario['nome'];
+			$_SESSION['pizzaria_id'] = $usuario['pizzaria_id'];
+			header("Location: admin/app/index/index.php");
+			exit();
+		} else {
+			echo "<script>alert('Email ou senha inválidos');</script>";
+		}
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +55,7 @@
 					<img src="images/img-01.png" alt="IMG">
 				</div>
 
-				<form class="login100-form validate-form" method="POST" action="login.php">
+				<form class="login100-form validate-form" method="POST" action="index.php">
 					<span class="login100-form-title">
 						Fazer Login
 					</span>
@@ -67,10 +92,7 @@
 					</div>
 
 					<div class="text-center p-t-136">
-						<a class="txt2" href="cadastro.html">
-							Criar Nova Conta
-							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a>
+						
 					</div>
 				</form>
 			</div>

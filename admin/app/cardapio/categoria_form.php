@@ -1,7 +1,9 @@
 <?php
   require_once("../config/database.php");
+  require_once("../config/permissoes.php");
+  exigirLogin();
 
-  $pizzaria_id = 1;
+  $pizzaria_id = $_SESSION['pizzaria_id'];
   $id = $_GET['id'] ?? null;
   if($id){
     $stmt = $pdo->prepare("SELECT * FROM categorias WHERE id = :id AND pizzaria_id = :pizzaria_id");
